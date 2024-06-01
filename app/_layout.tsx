@@ -7,6 +7,7 @@ import "react-native-reanimated";
 import { CustomHeader } from "@/components/custom-header";
 import { useColorScheme } from "@/hooks/useColorScheme";
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
+import { StatusBar } from "expo-status-bar";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
@@ -30,13 +31,21 @@ export default function RootLayout() {
 
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
+      <StatusBar style="dark" />
       <BottomSheetModalProvider>
         <Stack>
           <Stack.Screen
             name="index"
             options={{ header: () => <CustomHeader /> }}
           />
-          {/* <Stack.Screen name="+not-found" /> */}
+          <Stack.Screen
+            name="(modal)/filter"
+            options={{
+              presentation: "modal",
+              headerTitle: "Filter",
+              headerShadowVisible: false,
+            }}
+          />
         </Stack>
       </BottomSheetModalProvider>
     </GestureHandlerRootView>

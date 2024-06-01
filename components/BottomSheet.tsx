@@ -1,9 +1,11 @@
 import Colors from "@/constants/Colors";
+import { Ionicons } from "@expo/vector-icons";
 import {
   BottomSheetBackdrop,
   BottomSheetModal,
   useBottomSheetModal,
 } from "@gorhom/bottom-sheet";
+import { Link } from "expo-router";
 import React, { forwardRef, useCallback, useMemo } from "react";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
@@ -36,17 +38,36 @@ const BottomSheet = forwardRef<Ref>((props, ref) => {
             style={styles.toggleActive}
             onPress={() => dismiss()}
           >
-            <Text>Delivery</Text>
+            <Text style={styles.activeText}>Delivery</Text>
           </TouchableOpacity>
           <TouchableOpacity
             style={styles.toggleInactive}
             onPress={() => dismiss()}
           >
-            <Text>Pick up</Text>
+            <Text style={styles.inActiveText}>Pick up</Text>
           </TouchableOpacity>
         </View>
+
+        <Text style={styles.subHeader}> Your location</Text>
+
+        <Link href={"/"} asChild>
+          <TouchableOpacity style={styles.item}>
+            <Ionicons name="location-outline" size={20} color={Colors.medium} />
+            <Text style={{ flex: 1 }}>Current location</Text>
+            <Ionicons name="chevron-forward" size={20} color={Colors.medium} />
+          </TouchableOpacity>
+        </Link>
+
+        <Text style={styles.subHeader}> Arrival time</Text>
+        <Link href={"/"} asChild>
+          <TouchableOpacity style={styles.item}>
+            <Ionicons name="location-outline" size={20} color={Colors.medium} />
+            <Text style={{ flex: 1 }}>Current location</Text>
+            <Ionicons name="chevron-forward" size={20} color={Colors.medium} />
+          </TouchableOpacity>
+        </Link>
         <TouchableOpacity style={styles.button} onPress={() => dismiss()}>
-          <Text>Confirm</Text>
+          <Text style={styles.btnText}>Confirm</Text>
         </TouchableOpacity>
       </View>
     </BottomSheetModal>
@@ -63,12 +84,28 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "center",
     alignItems: "center",
-    gap: 20,
+    gap: 10,
   },
   toggleActive: {
     backgroundColor: Colors.primary,
+    padding: 8,
+    borderRadius: 32,
+    paddingHorizontal: 30,
   },
-  toggleInactive: {},
+  activeText: {
+    color: "#fff",
+    fontWeight: "700",
+  },
+  toggleInactive: {
+    // backgroundColor: Colors.primary,
+    padding: 8,
+    borderRadius: 32,
+    paddingHorizontal: 30,
+  },
+  inActiveText: {
+    color: Colors.primary,
+    fontWeight: "700",
+  },
   button: {
     backgroundColor: Colors.primary,
     padding: 16,
@@ -79,5 +116,19 @@ const styles = StyleSheet.create({
   btnText: {
     color: "#fff",
     fontWeight: "bold",
+  },
+  subHeader: {
+    fontSize: 16,
+    fontWeight: "600",
+    margin: 16,
+  },
+  item: {
+    flexDirection: "row",
+    gap: 8,
+    alignItems: "center",
+    backgroundColor: "#fff",
+    padding: 16,
+    borderColor: Colors.grey,
+    borderWidth: 1,
   },
 });
