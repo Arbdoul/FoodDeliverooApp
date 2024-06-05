@@ -2,8 +2,9 @@ import { categories } from "@/assets/data/home";
 import Colors from "@/constants/Colors";
 import { Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "expo-router";
-import React from "react";
+import React, { useState } from "react";
 import {
+  Button,
   FlatList,
   ListRenderItem,
   StyleSheet,
@@ -13,10 +14,14 @@ import {
 } from "react-native";
 import BouncyCheckbox from "react-native-bouncy-checkbox";
 
+type checkBox = {
+  checked?: boolean;
+};
 interface Category {
   name: string;
   count: number;
-  // checked?: boolean;
+  checked?: boolean;
+  //    checked?: checkBox;
   // image: ImageProps;
   //   text: string;
   //   img: ImageProps;
@@ -52,19 +57,55 @@ const ItemBox = () => (
 
 const Filter = () => {
   const navigation = useNavigation();
+  const [items, setItems] = useState<Category[]>(categories);
 
-  const renderItem: ListRenderItem<Category> = ({ item }) => (
+  const handleClearAll = () => {
+    const updateItems = items.map((item) => {
+      item.checked = false;
+
+      return item;
+    });
+    setItems(updateItems);
+  };
+
+  const renderItem: ListRenderItem<Category> = ({ item, index }) => (
     <View style={styles.row}>
-      <Text>
-        {item.name} ({item.count})
-      </Text>
-      <BouncyCheckbox />
+      <View>
+        <Text style={styles.itemText}>
+          {item.name} ({item.count})
+        </Text>
+      </View>
+      <View>
+        <BouncyCheckbox
+          fillColor={Colors.primary}
+          unFillColor={"#fff"}
+          iconStyle={{
+            borderColor: Colors.primary,
+            borderRadius: 4,
+            borderWidth: 2,
+          }}
+          innerIconStyle={{ borderColor: Colors.primary, borderRadius: 4 }}
+          isChecked={items[index].checked}
+          onPress={() => {
+            const isChecked = items[index].checked;
+
+            const updateItems = items.map((item) => {
+              if (item.name === items[index].name) {
+                item.checked = !isChecked;
+              }
+              return item;
+            });
+            setItems(updateItems);
+          }}
+        />
+      </View>
     </View>
   );
   return (
     <View style={styles.container}>
+      <Button title="clear all" onPress={handleClearAll} />
       <FlatList
-        data={categories}
+        data={items}
         renderItem={renderItem}
         ListHeaderComponent={<ItemBox />}
       />
@@ -110,13 +151,6 @@ const styles = StyleSheet.create({
     padding: 16,
     alignItems: "center",
     borderRadius: 8,
-    // elevation: 10,
-    // shadowOpacity: 0.1,
-    // shadowRadius: 10,
-    // shadowOffset: {
-    //   width: 0,
-    //   height: -10,
-    // },
   },
   footerText: {
     color: "#fff",
@@ -144,10 +178,11 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
   },
   itemText: {
-    flex: 1,
+    // flex: 1,
   },
   row: {
     flexDirection: "row",
+    justifyContent: "space-between",
     alignItems: "center",
     padding: 10,
     backgroundColor: "#fff",
